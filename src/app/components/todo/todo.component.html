@@ -1,0 +1,12 @@
+<ul>
+  <li *ngFor="let item of todos"> Task: {{item.name}}</li>
+</ul>
+<div>
+  <div class="form-group">
+    <label>Add todo </label>
+    <input class="form-control" name="title" [(ngModel)]="name" />
+  </div>
+  <div class="form-group">
+    <button class="btn btn-default" (click)="addTodo()"> Добавить</button>
+  </div>
+</div>
