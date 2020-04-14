@@ -19,12 +19,18 @@ export class TodoComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.todos = await this.service.getDataFromJson().toPromise();
+    this.service.todos = this.todos;
   }
 
   addTodo(): void {
     this.todos.push({
       id: Math.max(...this.todos.map(todo => todo.id)) + 1,
-      name: this.name
+      name: this.name,
+      checked: false,
     });
+  }
+
+  deleteTodos(): void {
+    this.service.delete();
   }
 }

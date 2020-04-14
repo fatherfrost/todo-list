@@ -1,12 +1,14 @@
-<ul>
-  <li *ngFor="let item of todos"> Task: {{item.name}}</li>
-</ul>
+<div *ngFor="let object of todos">
+  <input type="checkbox" [checked]="object.checked"> {{object.name}}
+</div>
 <div>
-  <div class="form-group">
-    <label>Add todo </label>
-    <input class="form-control" name="title" [(ngModel)]="name" />
+  <div>
+    <label>
+      <input class="todo_header_input" type="text" placeholder="New Todo" [(ngModel)]="name">
+    </label>
+    <button (click)="addTodo()" class="add_button">Add Todo</button>
   </div>
-  <div class="form-group">
-    <button class="btn btn-default" (click)="addTodo()"> Добавить</button>
+  <div>
+    <button (click)="deleteTodos()" class="button">Delete</button>
   </div>
 </div>
