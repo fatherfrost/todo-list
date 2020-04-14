@@ -1,12 +1,42 @@
-<ul>
-  <li *ngFor="let item of todos"> Task: {{item.name}}</li>
-</ul>
-<div>
-  <div class="form-group">
-    <label>Add todo </label>
-    <input class="form-control" name="title" [(ngModel)]="name" />
+<div class="todo">
+  <div class="todo_header">
+    <h1 class="todo_header_title">TODO List</h1>
+    <div>
+      <label>
+        <input type="text" placeholder="Filter list" (input)="filterTodosArray($event)">
+      </label>
+    </div>
+    <hr>
+    <div>
+      <label>
+        <input class="todo_header_input" type="text" placeholder="New Todo" [(ngModel)]="todoText">
+      </label>
+      <button (click)="addTodo()" class="add_button">Add Todo</button>
+    </div>
   </div>
-  <div class="form-group">
-    <button class="btn btn-default" (click)="addTodo()"> Добавить</button>
+  <div class="q">
+    <ul>
+
+      <li *ngFor="let todo of todos; let i = index">
+        <label>
+          <input type="checkbox" class="checkboxClass">
+          <span *ngIf="editedTodoIndex !== i" (click)="clickTodo(todo)">{{todo.text}}</span>
+          <input class="todo_header_input" *ngIf="editedTodoIndex === i" type="text" [ngModel]="todo.text"
+                 (ngModelChange)="updateText($event)">
+        </label>
+        <span class="edit"><button class="edit_button"
+                                   (click)="editTodo(i)">{{editedTodoIndex !== i ? 'Edit' : 'Save'}}</button></span>
+        <span class="delete"><button class="delete_button" (click)="deleteTodo(todo)">Delete</button></span>
+      </li>
+    </ul>
+    <label>
+      <input type="text" placeholder="Search Todo" [(ngModel)]="searchText">
+    </label>
+    <span><button (click)="searchTodo()">Search</button><button (click)="resetTodo()">Reset</button></span>
+    <ul>
+      <li *ngFor="let todo of foundTodos; ">
+        {{todo.text}} {{todo.id}}
+      </li>
+    </ul>
   </div>
 </div>

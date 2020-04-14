@@ -1,4 +1,4 @@
 export class Todo {
-  id: number;
-  name: string;
+  id: string;
+  text: string;
 }
