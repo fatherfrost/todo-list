@@ -1,16 +1,16 @@
 [
   {
-    "id": 1,
+    "id": "1",
     "name": "First todo",
     "checked": false
   },
   {
-    "id": 2,
+    "id": "2",
     "name": "Second todo",
     "checked": true
   },
   {
-    "id": 3,
+    "id": "3",
     "name": "Third todo",
     "checked": false
   }

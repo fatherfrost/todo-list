@@ -1,5 +1,5 @@
 <div *ngFor="let object of todos">
-  <input type="checkbox" [checked]="object.checked"> {{object.name}}
+  <input type="checkbox" [checked]="object.value.checked"  (click)="check(object.key)">{{object.value.name}}
 </div>
 <div>
   <div>

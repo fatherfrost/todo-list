@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Todo} from '../../interfaces/todo';
 import {HttpClient} from '@angular/common/http';
 import {TodoService} from '../../services/todo.service';
 
@@ -9,7 +8,7 @@ import {TodoService} from '../../services/todo.service';
   styleUrls: ['./todo.component.css']
 })
 export class TodoComponent implements OnInit {
-  todos: Todo[] = [];
+  todos = [];
   name: string;
   constructor(
     private http: HttpClient,
@@ -18,19 +17,62 @@ export class TodoComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.todos = await this.service.getDataFromJson().toPromise();
-    this.service.todos = this.todos;
+    this.getAll();
+    if (this.todos.length === 0) {
+      this.todos = [];
+      const json = await this.service.getDataFromJson().toPromise();
+      json.forEach(item => {
+        this.todos.push({key: item.id, value: {name: item.name, checked: item.checked}});
+        localStorage.setItem(item.id, JSON.stringify({name: item.name, checked: item.checked}));
+      });
+    }
+    console.log(this.todos);
   }
 
   addTodo(): void {
-    this.todos.push({
-      id: Math.max(...this.todos.map(todo => todo.id)) + 1,
+    const todo = {
       name: this.name,
       checked: false,
-    });
+    };
+    const id = this.findNewId();
+    this.todos.push({key: id, value: todo});
+    localStorage.setItem(id, JSON.stringify(todo));
+    this.name = '';
+  }
+
+  getAll(): any[] {
+    const arr = [];
+    for (let i = 0; i < localStorage.length; i++){
+      const key = localStorage.key(i);
+      const value = localStorage.getItem(key);
+      arr.push({key, value: JSON.parse(value)});
+    }
+    arr.sort((a, b) => parseInt(a.key, 10) - parseInt(b.key, 10));
+    this.todos = arr;
+    return arr;
+  }
+
+  findNewId(): string {
+    let max = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+      if (!!parseInt(localStorage.key(i), 10) && parseInt(localStorage.key(i), 10) > max) {
+        max = parseInt(localStorage.key(i), 10);
+      }
+    }
+    return (max + 1).toString();
   }
 
   deleteTodos(): void {
-    this.service.delete();
+    const all = this.getAll();
+    this.service.delete(all);
+  }
+
+  check(id): void {
+    const index = this.todos.findIndex(item => item.key === id);
+    this.todos[index].value.checked = !this.todos[index].value.checked;
+    const todoValue = localStorage.getItem(id);
+    const value = JSON.parse(todoValue);
+    value.checked = !value.checked;
+    localStorage.setItem(id, JSON.stringify(value));
   }
 }

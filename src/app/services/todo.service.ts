@@ -7,22 +7,19 @@ import {Todo} from '../interfaces/todo';
   providedIn: 'root'
 })
 export class TodoService {
-  todos: Todo[];
   constructor(private http: HttpClient) {
   }
 
-  getDataFromJson(): Observable<Todo[]> {
-    return this.http.get<Todo[]>('assets/json/todo.json');
+  getDataFromJson(): Observable<any> {
+    return this.http.get('assets/json/todo.json');
   }
 
-  async delete(): Promise<any> {
-    const todos: Todo[] = await this.getDataFromJson().toPromise();
-    todos.forEach(todo => {
-      if (todo.checked) {
-        const deletedIndex = this.todos.findIndex(item => item.id === todo.id);
-        this.todos.slice(deletedIndex, 1);
+  async delete(arr: any[]): Promise<void> {
+    arr.forEach(todo => {
+      console.log(todo.value.name, ' ', todo.value.checked);
+      if (todo.value.checked) {
+        localStorage.removeItem(todo.key);
       }
     });
-    return 'ok';
   }
 }
