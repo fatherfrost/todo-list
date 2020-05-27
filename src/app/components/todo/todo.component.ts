@@ -17,16 +17,11 @@ export class TodoComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.getAll();
-    if (this.todos.length === 0) {
-      this.todos = [];
-      const json = await this.service.getDataFromJson().toPromise();
-      json.forEach(item => {
-        this.todos.push({key: item.id, value: {name: item.name, checked: item.checked}});
-        localStorage.setItem(item.id, JSON.stringify({name: item.name, checked: item.checked}));
-      });
-    }
-    console.log(this.todos);
+    const evtSource1 = new EventSource('http://localhost:3000/companies/connect');
+    evtSource1.addEventListener('message', event => {
+      const data = JSON.parse(event.data);
+      console.log(data);
+    });
   }
 
   addTodo(): void {
@@ -65,6 +60,12 @@ export class TodoComponent implements OnInit {
   deleteTodos(): void {
     const all = this.getAll();
     this.service.delete(all);
+  }
+
+  deleteTodo(key): void {
+    localStorage.removeItem(key);
+    const index = this.todos.findIndex(item => item.key === key);
+    this.todos.slice(index, 1);
   }
 
   check(id): void {

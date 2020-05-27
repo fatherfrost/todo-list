@@ -1,5 +1,6 @@
 <div *ngFor="let object of todos">
-  <input type="checkbox" [checked]="object.value.checked"  (click)="check(object.key)">{{object.value.name}}
+  <input type="text" [(ngModel)]="object.name"  />
+  <button (click)="deleteTodo(object.key)" class="button">Delete</button>
 </div>
 <div>
   <div>
@@ -7,8 +8,5 @@
       <input class="todo_header_input" type="text" placeholder="New Todo" [(ngModel)]="name">
     </label>
     <button (click)="addTodo()" class="add_button">Add Todo</button>
-  </div>
-  <div>
-    <button (click)="deleteTodos()" class="button">Delete</button>
   </div>
 </div>
